@@ -15,19 +15,21 @@ class _HomePageState extends State<HomePage> {
   Future<void> scanBarcodeNormal() async {
     String _scanBarcode;
     String barcodeScanRes;
-    String name, image, price;
     try {
+      String name, image;
+      int price;
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", null , true, ScanMode.BARCODE);
-      _firestore.collection('products').document(barcodeScanRes).get().
-      then((DocumentSnapshot snapshot) async{
-        setState(() {
-          name = snapshot.data['name'];
-          image = snapshot.data['image'];
-          price = snapshot.data['price'];
-        });
+      var getProduct = await _firestore.collection('products').document(barcodeScanRes);
+      getProduct.get().then((value) => {
+        name = value.data['name'],
+        image = value.data['image'],
+        price = value.data['price'],
+        print(name),
+        print(price),
+        print(image),
+        AddToCart(name, image, price, barcodeScanRes)
       });
-      AddToCart(name, image,price,barcodeScanRes);
     } catch(e){
       print(e);
     }
@@ -37,7 +39,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void AddToCart(String name, String image,String price, String cid) async{
+  void AddToCart(String name, String image,int price, String cid) async{
+    print(name);
+    print(image);
+    print(cid);
+    print(price);
     Firestore __firestore = Firestore.instance;
     final _auth = FirebaseAuth.instance;
 
@@ -63,7 +69,6 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     RaisedButton(
                         onPressed: () => scanBarcodeNormal(),
-
                         child: Text("Start barcode scan")),
                   ]));
         }));

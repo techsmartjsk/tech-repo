@@ -12,10 +12,7 @@ enum NavigationEvents {
 abstract class NavigationStates {}
 
 class NavigationBloc extends Bloc<NavigationEvents, NavigationStates> {
-  NavigationBloc() : super(null);
-
-  @override
-  NavigationStates get initialState => MyAccountsPage();
+  NavigationBloc(NavigationStates initialState) : super(initialState);
 
   @override
   Stream<NavigationStates> mapEventToState(NavigationEvents event) async* {

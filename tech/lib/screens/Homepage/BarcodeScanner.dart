@@ -26,10 +26,12 @@ class _barcodeState extends State<barcodeApp> {
   void getCurrentUser() async{
     try{
       final User =  await _auth.currentUser();
+      var height =
+          MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
       if(User == null){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Login()),
+          MaterialPageRoute(builder: (context) => Login(screenHeight: height,)),
         );
         uid = User.uid;
       }

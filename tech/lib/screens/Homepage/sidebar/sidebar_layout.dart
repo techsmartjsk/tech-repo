@@ -1,3 +1,4 @@
+import 'package:Technovatives/screens/Homepage/pages/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +10,7 @@ class SideBarLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<NavigationBloc>(
-        create: (context) =>  NavigationBloc(),
+        create: (context) =>  NavigationBloc(HomePage()),
         child: Stack(
           children: <Widget>[
             BlocBuilder<NavigationBloc, NavigationStates>(

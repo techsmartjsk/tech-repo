@@ -1,3 +1,4 @@
+import 'package:Technovatives/screens/login/widgets/register_form.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Technovatives/constants.dart';
@@ -15,9 +16,13 @@ class LoginForm extends StatefulWidget {
   }) : assert(animation != null);
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends State<LoginForm> with SingleTickerProviderStateMixin{
   FirebaseUser loggendinuser;
   String email,password;
+
+  AnimationController _animationController;
+  Animation<double> _formElementAnimation;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   void getCurrentUser() async{
     try{
@@ -37,7 +42,28 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: kLoginAnimationDuration,
+    );
+
+    var fadeSlideTween = Tween<double>(begin: 0.0, end: 1.0);
+    _formElementAnimation = fadeSlideTween.animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.7,
+        1.0,
+        curve: Curves.easeInOut,
+      ),
+    ));
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -145,7 +171,12 @@ class _LoginFormState extends State<LoginForm> {
               color: kBlack,
               textColor: kWhite,
               text: 'Create a Technovatives Account',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegisterForm()),
+                );
+              },
             ),
           ),
         ],
